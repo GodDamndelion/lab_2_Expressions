@@ -2,11 +2,25 @@ package lab2.ExpressionTree;
 
 import java.util.Scanner;
 
+/**
+ * Класс Дерево выражений для хранения выражения и его значения
+ *
+ * @author Pavel Bolshakov
+ * @version 1.0
+ */
 public class ExpressionTree {
-    private Node root; // ссылка на корень дерева
-    private double result; // результат вычисления выражения всего поддерева
+    /**
+     * Ссылка на корень дерева
+     */
+    private Node root;
+    /**
+     *  Результат вычисления выражения всего дерева
+     */
+    private double result;
 
-    // Конструктор
+    /**
+     * Пустой конструктор
+     */
     public ExpressionTree() {
         root = null;
         result = 0;
@@ -23,8 +37,8 @@ public class ExpressionTree {
     }
 
     /**
-     * Основная функция обработки строки
-     * Начинает рекурсивную разработку строки
+     * Основная функция обработки строки.
+     * Начинает рекурсивный разбор строки.
      *
      * @see ExpressionTree#recursion(String, Scanner)
      *      После заполнения вызывает функцию печати и выводит результат
@@ -41,6 +55,7 @@ public class ExpressionTree {
         else
             root.print(root);
 
+        System.out.println();
         System.out.println("Result: ");
         System.out.println(result);
         in.close();
@@ -63,17 +78,17 @@ public class ExpressionTree {
      */
     public final boolean filling(String value, Scanner in) {
         boolean res = false;
-        Parser comp = new Parser(value);
+        Parser parser = new Parser(value);
 
-        if (comp.correct()) {
+        if (parser.isCorrect()) {
             res = true;
 
             root = new Node();
 
-            if (comp.isItExpression())
-                root = root.fillingBranch(root, comp, in);
-            else
-                result = Double.parseDouble(comp.parse());
+            if (parser.isItExpression()) {
+                root.fillingBranch(root, parser, in);
+            } else
+                result = Double.parseDouble(parser.parse());
             // root.print(root);
         } else
             System.out.println("Error!");

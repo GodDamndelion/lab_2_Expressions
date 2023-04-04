@@ -2,13 +2,38 @@ package lab2.ExpressionTree;
 
 import java.util.Scanner;
 
+/**
+ * Класс Узел Дерева выражений
+ *
+ * @see ExpressionTree
+ * @author Pavel Bolshakov
+ * @version 1.0
+ */
 class Node {
-    private ExpressionTree subTree; // возможное поддерево
-    private Node left; // левая ветвь
-    private Node right; // правая ветвь
-    private double value; // численное значение
-    private String term; // Операнд
-    private boolean isFilling; // заполненость уровня
+    /**
+     * Возможное поддерево
+     */
+    private ExpressionTree subTree;
+    /**
+     * Левая ветвь
+     */
+    private Node left;
+    /**
+     * Правая ветвь
+     */
+    private Node right;
+    /**
+     * Численное значение
+     */
+    private double value;
+    /**
+     * Операнд
+     */
+    private String term;
+    /**
+     * Заполнен ли уровень
+     */
+    private boolean isFilling;
 
     /** Конструктор без параметров */
     Node() {
@@ -21,8 +46,15 @@ class Node {
     }
 
     /**
-     * Установка в качестве значения результата вычисление поддерева
-     *
+     * Возвращает значение Узла
+     * @return текущее значение
+     */
+    public double getValue() {
+        return value;
+    }
+
+    /**
+     * Установка в качестве значения результата вычисления поддерева
      * @see ExpressionTree#get_result()
      */
     public void setValueBySubTree() {
@@ -30,7 +62,7 @@ class Node {
     }
 
     /**
-     * возвращает заполненость уровня
+     * Возвращает, заполнен ли уровень
      */
     public boolean isFilling() {
         return isFilling;
@@ -38,8 +70,7 @@ class Node {
 
     /**
      * Создание левой ветви
-     *
-     * @param root - корень дерева
+     * @param root корень дерева
      * @see Node#Node()
      */
     public void createLeftBranch(Node root) {
@@ -49,8 +80,7 @@ class Node {
 
     /**
      * Создание правой ветви
-     *
-     * @param root - корень дерева
+     * @param root корень дерева
      * @see Node#Node()
      */
     public void createRightBranch(Node root) {
@@ -58,7 +88,13 @@ class Node {
             root.right = new Node();
     }
 
-    public final Node fillingBranch(Node root, Parser parser, Scanner in) {
+    /**
+     * Заполнение ветви дерева
+     * @param root корень дерева
+     * @param parser парсер
+     * @param in Scanner
+     */
+    public final void fillingBranch(Node root, Parser parser, Scanner in) {
         String part;
 
         while (!root.isFilling) {
@@ -111,14 +147,12 @@ class Node {
             }
         }
 
-        return root;
     }
 
     /**
-     * Функция рекурсивного обзода дерева и подсчета выражения
-     *
-     * @param root   - корень дерева
-     * @param result - итоговое значение выражения
+     * Функция рекурсивного обхода дерева и подсчета выражения
+     * @param root корень дерева
+     * @param result итоговое значение выражения
      * @return result
      */
     public final double calculate(Node root, double result) {
@@ -127,26 +161,21 @@ class Node {
         else {
             result = calculate(root.left, result);
             switch (root.term) {
-                case "+": {
+                case "+" -> {
                     result = result + calculate(root.right, result);
                 }
-                break;
-                case "-": {
+                case "-" -> {
                     result = result - calculate(root.right, result);
                 }
-                break;
-                case "*": {
+                case "*" -> {
                     result = result * calculate(root.right, result);
                 }
-                break;
-                case "/": {
+                case "/" -> {
                     result = result / calculate(root.right, result);
                 }
-                break;
-                case "^": {
+                case "^" -> {
                     result = Math.pow(result, calculate(root.right, result));
                 }
-                break;
             }
         }
 
@@ -155,10 +184,7 @@ class Node {
 
     /**
      * Функция рекурсивной печати
-     *
-     * @see ExpressionTree#get_root()
-     * @see Node#isFilling()
-     * @param root - корень дерева
+     * @param root корень дерева
      */
     void print(Node root) {
         if (root.left == null && root.right == null)
